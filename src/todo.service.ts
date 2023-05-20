@@ -14,11 +14,31 @@ export class  TodoService{
 
     async createTask(task:TaskDto){
         const taskObj = new this.taskModel(task);
-          const createTask = await taskObj.save();
+          // const createTask = await taskObj.save();
+         const resp =  await this.taskModel.find();
+         
            return new ApiResponseDto({
             statusCode: 201,
             message :'Succesfully Created the task',
-            //  data: createTask
+             data: resp
         }) 
+      }
+
+      async updateTask(task:TaskDto,response){
+  const res  = await this.taskModel.updateOne(
+        {name:task.name},
+        {$set:{taskStatus:task.taskStatus},
+      }
+       )
+       console.log(task);
+      //  return new ApiResponseDto({
+      //   statusCode:201,
+      //   message:'Succefullly updated the status'
+      //  });
+       response.status(201).json(new ApiResponseDto({
+        statusCode:201,
+        message:'Succefullly updated the status'
+       }));
+      //  res.status(apiResponse.statusCode).json(apiResponse);
       }
 }
